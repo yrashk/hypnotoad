@@ -14,7 +14,7 @@ target_link_libraries(clips ${M_LIB})
 target_link_libraries(hypnotoad libzmq.a ${M_LIB})
 include_directories("deps/clips/core" "deps/zeromq/include")
 
-add_custom_command(OUTPUT deps/zeromq/src/.libs/libzmq.a
+add_custom_command(TARGET hypnotoad PRE_BUILD
                    COMMAND ./autogen.sh
                    COMMAND ./configure
                    COMMAND make
