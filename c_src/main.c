@@ -14,6 +14,9 @@ int main(int argc, char **argv) {
        UserFunctions();
 
        zmq = zmq_init(1);
+       void * pub = zmq_socket(zmq, ZMQ_PUB);
+       zmq_bind(pub, "tcp://*:5554");
+
        void * sub = zmq_socket(zmq, ZMQ_SUB);
        zmq_bind(sub, "tcp://*:5555");
        zmq_setsockopt(sub, ZMQ_SUBSCRIBE, "", 0);
