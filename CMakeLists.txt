@@ -11,10 +11,11 @@ find_library(M_LIB m)
 add_executable(clips ${MAIN_CLIPS_SRC})
 add_executable(hypnotoad ${SRC} ${CLIPS_SRC})
 target_link_libraries(clips ${M_LIB})
+add_dependencies(hypnotoad deps/zeromq/.libs/libzmq.a)
 target_link_libraries(hypnotoad libzmq.a ${M_LIB})
 include_directories("deps/clips/core" "deps/zeromq/include")
 
-add_custom_command(TARGET hypnotoad PRE_BUILD
+add_custom_command(OUTPUT deps/zeromq/.libs/libzmq.a
                    COMMAND ./autogen.sh
                    COMMAND ./configure
                    COMMAND make
