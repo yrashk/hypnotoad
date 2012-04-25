@@ -25,15 +25,16 @@ class FileServer(threading.Thread):
         while True:
             data = self.command.receive()
             url = urlparse(data)
-            if url.scheme == 'hypnotoad' and url.netloc = self.command.id:
-                self.serve(data, url.path)
+            if url.scheme == 'hypnotoad' and url.netloc == self.command.id:
+                self.serve(data, url.path.lstrip('/'))
 
     def serve(self, url, path):
         f = open(path, 'r')
+        print 1
         content = f.read()
-        b64 = base64.b64encode(content)
-        self.command.publish('(remote-file-content "%s" "%s")' % (url, b64))
-    
+        print 2
+        self.command.publish(url, content)
+        print 3
 
 class Command:
     def __init__(self, args):
@@ -47,8 +48,8 @@ class Command:
         self.args = args
         self.id = str(uuid.uuid4())
 
-    def publish(self, data):
-        self.pub.send_multipart([data])
+    def publish(self, topic, data):
+        self.pub.send_multipart([topic, data])
 
     def receive(self):
         return self.sub.recv()
@@ -58,7 +59,7 @@ class Apply(Command):
     def run(self):
         print "Applying", self.args
         include_stmt = string.join([ '(include "hypnotoad://%s/%s")' % (self.id, toadie) for toadie in self.args ])
-        self.publish(include_stmt)
+        self.publish("facts", include_stmt)
 
 Commands = {'apply': Apply}
 
@@ -72,11 +73,7 @@ def main():
     file_server = FileServer(command)
     file_server.start()
 
-    command.run()
-
-    file_server.join()
-    
-    
+    command.run()    
 
 
 if __name__ == "__main__":

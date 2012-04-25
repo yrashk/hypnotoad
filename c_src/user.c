@@ -12,8 +12,6 @@ void * remote_retr_file()
 
 	char * filename = (char *) DOToString(data);
 
-	printf("Fetching %s\n", filename);
-
     zmq_msg_t message;
     zmq_msg_init_size (&message, strlen(filename));
     memcpy (zmq_msg_data (&message), filename, strlen(filename));

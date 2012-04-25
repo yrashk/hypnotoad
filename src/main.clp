@@ -2,10 +2,26 @@
 
 (defrule load-constructs ?fact <- (require ?filename) 
          => 
-         (load (remote-retrieve-file ?filename))
+         (remote-retrieve-file ?filename)
+         (assert (require-ready ?filename))
          (retract ?fact))
 
 (defrule load-facts ?fact <- (include ?filename) 
          => 
-         (load-facts (remote-retrieve-file ?filename))
+         (remote-retrieve-file ?filename)
+         (assert (include-ready ?filename))
          (retract ?fact))
+
+(defrule load-contructs-ready
+          ?fact <- (require-ready ?filename)
+          (remote-file ?filename ?local-filename)
+          =>
+          (load ?local-filename)
+          (retract ?fact))
+
+(defrule load-facts-ready
+          ?fact <- (include-ready ?filename)
+          (remote-file ?filename ?local-filename)
+          =>
+          (load-facts ?local-filename)
+          (retract ?fact))
