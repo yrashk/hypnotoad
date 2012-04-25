@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include "zmq.h"
 #include "clips.h"
+#include "hypnotoad.h"
 
-static void *zmq;
+void * zmq;
+void * pub;
 
 int main(int argc, char **argv) {
 	   InitializeEnvironment();
@@ -14,7 +16,7 @@ int main(int argc, char **argv) {
        UserFunctions();
 
        zmq = zmq_init(1);
-       void * pub = zmq_socket(zmq, ZMQ_PUB);
+       pub = zmq_socket(zmq, ZMQ_PUB);
        zmq_bind(pub, "tcp://*:5554");
 
        void * sub = zmq_socket(zmq, ZMQ_SUB);

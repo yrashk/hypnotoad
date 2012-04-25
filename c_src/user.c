@@ -1,4 +1,6 @@
 #include "clips.h"
+#include "zmq.h"
+#include "hypnotoad.h"
 
 void UserFunctions(void);
 void EnvUserFunctions(void *);
@@ -11,6 +13,12 @@ void * remote_retr_file()
 	char * filename = (char *) DOToString(data);
 
 	printf("Fetching %s\n", filename);
+
+    zmq_msg_t message;
+    zmq_msg_init_size (&message, strlen(filename));
+    memcpy (zmq_msg_data (&message), filename, strlen(filename));
+    zmq_send (pub, &message, 0);
+    zmq_msg_close (&message);
 
     void * result = AddSymbol(filename);
     
