@@ -12,7 +12,9 @@ void * remote_retr_file()
 
 	printf("Fetching %s\n", filename);
 
-	return filename;
+    void * result = AddSymbol(filename);
+    
+	return result;
 }
 
 void UserFunctions()
