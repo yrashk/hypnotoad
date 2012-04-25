@@ -14,8 +14,6 @@ int main(int argc, char **argv) {
        void * module = FindDefmodule("Hypnotoad");
        SetCurrentModule(module);
 
-       UserFunctions();
-
        zmq = zmq_init(1);
        pub = zmq_socket(zmq, ZMQ_PUB);
        zmq_bind(pub, "tcp://*:5554");
