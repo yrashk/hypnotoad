@@ -29,12 +29,10 @@ class FileServer(threading.Thread):
                 self.serve(data, url.path.lstrip('/'))
 
     def serve(self, url, path):
+        print "Sending %s" % path
         f = open(path, 'r')
-        print 1
         content = f.read()
-        print 2
         self.command.publish(url, content)
-        print 3
 
 class Command:
     def __init__(self, args):
