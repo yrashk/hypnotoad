@@ -1,9 +1,11 @@
 (defmodule Hypnotoad)
 
-(defrule load-constructs (require ?filename) 
+(defrule load-constructs ?fact <- (require ?filename) 
          => 
-         (load (remote-retrieve-file ?filename)))
+         (load (remote-retrieve-file ?filename))
+         (retract ?fact))
 
-(defrule load-facts (include ?filename) 
+(defrule load-facts ?fact <- (include ?filename) 
          => 
-         (load-facts (remote-retrieve-file ?filename)))
+         (load-facts (remote-retrieve-file ?filename))
+         (retract ?fact))
