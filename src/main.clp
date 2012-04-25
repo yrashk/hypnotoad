@@ -1,27 +1,27 @@
 (defmodule Hypnotoad)
 
-(defrule load-constructs ?fact <- (require ?filename) 
-         => 
-         (remote-retrieve-file ?filename)
-         (assert (require-ready ?filename))
-         (retract ?fact))
+(defrule load-constructs
+  (require ?filename)
+  (not (remote-file ?filename ?))
+  => 
+  (remote-retrieve-file ?filename))
 
-(defrule load-facts ?fact <- (include ?filename) 
-         => 
-         (remote-retrieve-file ?filename)
-         (assert (include-ready ?filename))
-         (retract ?fact))
+(defrule load-facts 
+  (include ?filename) 
+  (not (remote-file ?filename ?))
+  => 
+  (remote-retrieve-file ?filename))
 
 (defrule load-contructs-ready
-          ?fact <- (require-ready ?filename)
-          (remote-file ?filename ?local-filename)
-          =>
-          (load ?local-filename)
-          (retract ?fact))
+  ?fact <- (require ?filename)
+  (remote-file ?filename ?local-filename)
+  =>
+  (load ?local-filename)
+  (retract ?fact))
 
 (defrule load-facts-ready
-          ?fact <- (include-ready ?filename)
-          (remote-file ?filename ?local-filename)
-          =>
-          (load-facts ?local-filename)
-          (retract ?fact))
+  ?fact <- (include ?filename)
+  (remote-file ?filename ?local-filename)
+  =>
+  (load-facts ?local-filename)
+  (retract ?fact))
