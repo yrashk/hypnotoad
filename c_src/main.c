@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
 		    zmq_msg_close (&request);
 	   }
 
-
+       zmq_close(pub);
+       zmq_close(sub);
        zmq_term(zmq);
 
        DecrementGCLocks();
